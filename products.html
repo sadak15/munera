@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — Munera Skincare</title>
+  <meta name="description" content="Browse the full Munera Skincare collection — serums, moisturizers, cleansers, SPF and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/products.css">
+</head>
+<body>
+
+  <div id="app-header"></div>
+  <div id="toast-container"></div>
+
+  <main>
+
+    <!-- Page Banner -->
+    <!-- <div class="page-banner">
+      <div class="page-banner-bg">
+        <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1200&q=70&auto=format&fit=crop" alt="Shop Munera">
+      </div>
+      <div class="page-banner-overlay"></div>
+      <div class="page-banner-content container">
+        <h1>The Collection</h1>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li aria-current="page">Shop</li>
+          </ol>
+        </nav>
+      </div>
+    </div> -->
+
+    <div class="shop-layout container" id="shop-layout">
+
+      <!-- ── Sidebar Filters ──────────────────────────────── -->
+      <aside class="filter-sidebar" id="filter-sidebar">
+        <div class="filter-header">
+          <h3>Filters</h3>
+          <button class="filter-clear-all" id="clear-all-filters">Clear All</button>
+        </div>
+
+        <!-- Active Tags -->
+        <div class="active-filters" id="active-filters"></div>
+
+        <!-- Category Filter -->
+        <div class="filter-group" id="fg-category">
+          <button class="filter-group-toggle">
+            Category <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="filter-group-body">
+            <label class="filter-checkbox"><input type="checkbox" value="serums"> Serums</label>
+            <label class="filter-checkbox"><input type="checkbox" value="moisturizers"> Moisturizers</label>
+            <label class="filter-checkbox"><input type="checkbox" value="cleansers"> Cleansers</label>
+            <label class="filter-checkbox"><input type="checkbox" value="toners"> Toners</label>
+            <label class="filter-checkbox"><input type="checkbox" value="masks"> Masks</label>
+            <label class="filter-checkbox"><input type="checkbox" value="eye-care"> Eye Care</label>
+            <label class="filter-checkbox"><input type="checkbox" value="spf"> SPF</label>
+            <label class="filter-checkbox"><input type="checkbox" value="sets"> Sets</label>
+          </div>
+        </div>
+
+        <!-- Skin Type Filter -->
+        <div class="filter-group" id="fg-skintype">
+          <button class="filter-group-toggle">
+            Skin Type <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="filter-group-body">
+            <label class="filter-checkbox"><input type="checkbox" value="all"> All Types</label>
+            <label class="filter-checkbox"><input type="checkbox" value="dry"> Dry</label>
+            <label class="filter-checkbox"><input type="checkbox" value="oily"> Oily</label>
+            <label class="filter-checkbox"><input type="checkbox" value="combination"> Combination</label>
+            <label class="filter-checkbox"><input type="checkbox" value="sensitive"> Sensitive</label>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-group" id="fg-price">
+          <button class="filter-group-toggle">
+            Price Range <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="filter-group-body">
+            <div class="price-range-inputs">
+              <input type="number" id="price-min" placeholder="Min" min="0" max="500">
+              <span>—</span>
+              <input type="number" id="price-max" placeholder="Max" min="0" max="500">
+            </div>
+            <button class="btn btn-sm btn-secondary" id="apply-price">Apply</button>
+          </div>
+        </div>
+
+        <!-- Rating Filter -->
+        <div class="filter-group" id="fg-rating">
+          <button class="filter-group-toggle">
+            Rating <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="filter-group-body">
+            <label class="filter-checkbox"><input type="radio" name="rating" value="4"> 4★ &amp; above</label>
+            <label class="filter-checkbox"><input type="radio" name="rating" value="3"> 3★ &amp; above</label>
+            <label class="filter-checkbox"><input type="radio" name="rating" value=""> All Ratings</label>
+          </div>
+        </div>
+
+        <!-- Mobile Close -->
+        <button class="filter-sidebar-close" id="filter-sidebar-close"><i class="fas fa-times"></i> Close</button>
+      </aside>
+      <div class="filter-overlay" id="filter-overlay"></div>
+
+      <!-- ── Products Area ────────────────────────────────── -->
+      <div class="products-area">
+
+        <!-- Topbar -->
+        <div class="products-topbar">
+          <div class="topbar-left">
+            <button class="btn-icon filter-open-btn" id="filter-open-btn" title="Filters">
+              <i class="fas fa-sliders-h"></i> Filters
+            </button>
+            <span class="product-count" id="product-count">Loading…</span>
+          </div>
+          <div class="topbar-right">
+            <div class="search-inline">
+              <i class="fas fa-search"></i>
+              <input type="text" id="inline-search" placeholder="Search products…">
+            </div>
+            <div class="sort-select-wrapper">
+              <select id="sort-select">
+                <option value="default">Featured</option>
+                <option value="price-asc">Price: Low → High</option>
+                <option value="price-desc">Price: High → Low</option>
+                <option value="rating">Top Rated</option>
+                <option value="name">Name A–Z</option>
+              </select>
+            </div>
+            <div class="view-toggle">
+              <button class="view-btn active" data-view="grid" title="Grid view"><i class="fas fa-th"></i></button>
+              <button class="view-btn" data-view="list" title="List view"><i class="fas fa-list"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="products-grid">
+          <!-- Injected by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display:none">
+          <i class="fas fa-search"></i>
+          <h3>No products found</h3>
+          <p>Try adjusting your filters or search term.</p>
+          <button class="btn btn-secondary" id="reset-filters">Reset Filters</button>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/products.js"></script>
+</body>
+</html>

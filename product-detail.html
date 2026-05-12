@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — Munera Skincare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/products.css">
+</head>
+<body>
+
+  <div id="app-header"></div>
+  <div id="toast-container"></div>
+
+  <main>
+    <div class="container" id="product-detail-root">
+      <div class="loading-spinner" style="padding:4rem 0;text-align:center">
+        <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--gold)"></i>
+      </div>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const slug = params.get('slug');
+
+      if (!id && !slug) {
+        window.location.href = 'products.html';
+        return;
+      }
+
+      const res = await API.products.getOne(id || slug);
+      if (!res.success) {
+        document.getElementById('product-detail-root').innerHTML = `
+          <div class="empty-state" style="padding:4rem 0">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Product not found</h3>
+            <a href="products.html" class="btn btn-secondary">Back to Shop</a>
+          </div>
+        `;
+        return;
+      }
+
+      const p = res.data;
+      document.title = `${p.name} — Munera Skincare`;
+
+      // Check wishlist status
+      const wishRes = await API.wishlist.isWishlisted(p.id);
+      const isWished = wishRes.success && wishRes.data;
+
+      const galleryThumbs = (p.images || [p.image]).map((img, i) => `
+        <button class="thumb-btn ${i === 0 ? 'active' : ''}" data-src="${img}">
+          <img src="${img}" alt="${p.name} ${i+1}">
+        </button>
+      `).join('');
+
+      const skinTypeTags = p.skinType.map(s => `<span class="skin-tag">${s}</span>`).join('');
+
+      document.getElementById('product-detail-root').innerHTML = `
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" style="padding:1.5rem 0 0" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop</a></li>
+            <li><a href="products.html?category=${p.category}">${p.category}</a></li>
+            <li aria-current="page">${p.name}</li>
+          </ol>
+        </nav>
+
+        <!-- Product Grid -->
+        <div class="product-detail-grid">
+
+          <!-- Gallery -->
+          <div class="product-gallery">
+            <div class="gallery-main">
+              <img src="${p.image}" alt="${p.name}" id="main-img">
+              ${p.badge ? `<span class="product-badge badge-${p.badge.toLowerCase().replace(/\s/g,'-')}">${p.badge}</span>` : ''}
+            </div>
+            <div class="gallery-thumbs">${galleryThumbs}</div>
+          </div>
+
+          <!-- Info -->
+          <div class="product-info">
+            <p class="product-info-category">${p.category}</p>
+            <h1 class="product-info-title">${p.name}</h1>
+            <div class="product-info-rating">
+              ${renderStars(p.rating)}
+              <span class="review-count">${p.reviews} reviews</span>
+            </div>
+
+            <div class="product-info-price">
+              <span class="price-current">${formatPrice(p.price)}</span>
+              ${p.originalPrice ? `<span class="price-original">${formatPrice(p.originalPrice)}</span>` : ''}
+              ${p.originalPrice ? `<span class="price-save">Save ${Math.round((1 - p.price/p.originalPrice)*100)}%</span>` : ''}
+            </div>
+
+            <p class="product-short-desc">${p.shortDescription}</p>
+
+            ${skinTypeTags ? `<div class="skin-types"><span class="skin-types-label">Best for:</span>${skinTypeTags}</div>` : ''}
+
+            <div class="product-size-info">
+              <i class="fas fa-flask"></i> ${p.size}
+            </div>
+
+            <!-- Add to Cart -->
+            <div class="product-purchase">
+              <div class="qty-selector">
+                <button class="qty-btn" id="qty-minus"><i class="fas fa-minus"></i></button>
+                <input type="number" id="qty-input" value="1" min="1" max="10" readonly>
+                <button class="qty-btn" id="qty-plus"><i class="fas fa-plus"></i></button>
+              </div>
+              <button class="btn btn-gold btn-lg add-to-cart-btn" id="add-to-cart" ${!p.inStock ? 'disabled' : ''}>
+                <i class="fas fa-shopping-bag"></i>
+                ${p.inStock ? 'Add to Cart' : 'Out of Stock'}
+              </button>
+              <button class="btn-icon wishlist-toggle ${isWished ? 'wishlisted' : ''}" data-id="${p.id}" id="detail-wishlist">
+                <i class="${isWished ? 'fas' : 'far'} fa-heart"></i>
+              </button>
+            </div>
+
+            <!-- Meta -->
+            <div class="product-meta">
+              <div class="meta-item"><i class="fas fa-truck"></i> Free shipping on orders over $75</div>
+              <div class="meta-item"><i class="fas fa-undo"></i> 30-day returns</div>
+              <div class="meta-item"><i class="fas fa-shield-alt"></i> Secure checkout</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="product-tabs">
+          <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="description">Description</button>
+            <button class="tab-btn" data-tab="ingredients">Ingredients</button>
+            <button class="tab-btn" data-tab="howtouse">How To Use</button>
+          </div>
+          <div class="tabs-content">
+            <div class="tab-panel active" id="tab-description">
+              <p>${p.description}</p>
+            </div>
+            <div class="tab-panel" id="tab-ingredients">
+              <p>${p.ingredients}</p>
+            </div>
+            <div class="tab-panel" id="tab-howtouse">
+              <p>${p.howToUse}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Products -->
+        <section class="related-products" style="margin:3rem 0">
+          <div class="section-head">
+            <span class="section-eyebrow">You May Also Like</span>
+            <h2 class="section-title">Related Products</h2>
+          </div>
+          <div class="products-grid" id="related-grid"></div>
+        </section>
+      `;
+
+      /* Gallery interaction */
+      document.querySelectorAll('.thumb-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('main-img').src = btn.dataset.src;
+        });
+      });
+
+      /* Qty selector */
+      let qty = 1;
+      document.getElementById('qty-minus')?.addEventListener('click', () => {
+        if (qty > 1) { qty--; document.getElementById('qty-input').value = qty; }
+      });
+      document.getElementById('qty-plus')?.addEventListener('click', () => {
+        if (qty < 10) { qty++; document.getElementById('qty-input').value = qty; }
+      });
+
+      /* Add to Cart */
+      document.getElementById('add-to-cart')?.addEventListener('click', async () => {
+        const btn = document.getElementById('add-to-cart');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding…';
+        const r = await API.cart.add(p.id, qty);
+        if (r.success) {
+          Toast.show(`${p.name} added to cart 🛍️`, 'success');
+          updateBadges();
+          btn.innerHTML = '<i class="fas fa-check"></i> Added to Cart!';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+          }, 2000);
+        } else {
+          Toast.show(r.error, 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+        }
+      });
+
+      /* Tabs */
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById(`tab-${btn.dataset.tab}`)?.classList.add('active');
+        });
+      });
+
+      /* Related Products */
+      const allRes = await API.products.getAll();
+      if (allRes.success) {
+        const related = allRes.data.filter(r => r.category === p.category && r.id !== p.id).slice(0, 4);
+        const relGrid = document.getElementById('related-grid');
+        if (relGrid) relGrid.innerHTML = related.map(buildProductCard).join('');
+      }
+    });
+  </script>
+</body>
+</html>
