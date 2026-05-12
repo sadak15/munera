@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account — Munera Skincare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body>
+
+  <div id="app-header"></div>
+  <div id="toast-container"></div>
+
+  <main>
+    <div class="page-banner page-banner-sm">
+      <div class="page-banner-overlay"></div>
+      <div class="page-banner-content container">
+        <h1>My Account</h1>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li aria-current="page">Account</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="account-layout container" id="account-root">
+      <div class="loading-spinner" style="padding:4rem 0;text-align:center">
+        <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--gold)"></i>
+      </div>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/account.js"></script>
+</body>
+</html>
