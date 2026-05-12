@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist — Munera Skincare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body>
+
+  <div id="app-header"></div>
+  <div id="toast-container"></div>
+
+  <main>
+    <div class="page-banner page-banner-sm">
+      <div class="page-banner-overlay"></div>
+      <div class="page-banner-content container">
+        <h1>Wishlist</h1>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li aria-current="page">Wishlist</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container" style="padding:3rem 1rem" id="wishlist-root">
+      <div class="loading-spinner" style="text-align:center">
+        <i class="fas fa-spinner fa-spin fa-2x" style="color:var(--gold)"></i>
+      </div>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await renderWishlist();
+    });
+
+    async function renderWishlist() {
+      const root = document.getElementById('wishlist-root');
+      if (!root) return;
+
+      const [wishRes, prodRes] = await Promise.all([
+        API.wishlist.get(),
+        API.products.getAll(),
+      ]);
+
+      if (!wishRes.success) {
+        root.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><h3>Failed to load wishlist.</h3></div>`;
+        return;
+      }
+
+      const products = prodRes.success ? prodRes.data : [];
+      const items = wishRes.data.map(id => products.find(p => String(p.id) === String(id))).filter(Boolean);
+
+      if (!items.length) {
+        root.innerHTML = `
+          <div class="empty-state" style="padding:4rem 0">
+            <i class="fas fa-heart"></i>
+            <h3>Your wishlist is empty</h3>
+            <p>Save products you love for later.</p>
+            <a href="products.html" class="btn btn-gold">Explore Products</a>
+          </div>
+        `;
+        return;
+      }
+
+      root.innerHTML = `
+        <div class="wishlist-header">
+          <h2>${items.length} Saved Item${items.length !== 1 ? 's' : ''}</h2>
+          <button class="btn btn-ghost btn-sm" id="clear-wishlist">
+            <i class="fas fa-times"></i> Clear All
+          </button>
+        </div>
+        <div class="wishlist-grid" id="wishlist-grid">
+          ${items.map(p => `
+            <div class="wishlist-card" data-id="${p.id}">
+              <div class="wishlist-card-img">
+                <a href="product-detail.html?id=${p.id}">
+                  <img src="${p.image}" alt="${p.name}" loading="lazy">
+                </a>
+                ${p.badge ? `<span class="product-badge badge-${p.badge.toLowerCase().replace(/\s/g,'-')}">${p.badge}</span>` : ''}
+                <button class="wishlist-remove-btn" data-id="${p.id}" aria-label="Remove from wishlist">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="wishlist-card-body">
+                <p class="product-category">${p.category}</p>
+                <h3><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
+                <div class="product-rating">${renderStars(p.rating)} <span class="review-count">(${p.reviews})</span></div>
+                <div class="product-price">
+                  <span class="price-current">${formatPrice(p.price)}</span>
+                  ${p.originalPrice ? `<span class="price-original">${formatPrice(p.originalPrice)}</span>` : ''}
+                </div>
+                <button class="btn btn-gold btn-sm move-to-cart-btn" data-id="${p.id}">
+                  <i class="fas fa-shopping-bag"></i> Add to Cart
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="text-align:center;margin-top:2rem">
+          <a href="products.html" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+      `;
+
+      bindWishlistEvents();
+    }
+
+    function bindWishlistEvents() {
+      // Remove individual item
+      document.querySelectorAll('.wishlist-remove-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const res = await API.wishlist.toggle(id);
+          if (res.success) {
+            document.querySelector(`.wishlist-card[data-id="${id}"]`)?.remove();
+            updateBadges();
+            Toast.show('Removed from wishlist.', 'info');
+            // Re-render if empty
+            const remaining = document.querySelectorAll('.wishlist-card').length;
+            if (!remaining) renderWishlist();
+          }
+        });
+      });
+
+      // Move to cart
+      document.querySelectorAll('.move-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          const res = await API.cart.add(id, 1);
+          if (res.success) {
+            Toast.show('Added to cart 🛍️', 'success');
+            updateBadges();
+            btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+          } else {
+            Toast.show(res.error, 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+          }
+        });
+      });
+
+      // Clear all
+      document.getElementById('clear-wishlist')?.addEventListener('click', async () => {
+        if (!confirm('Clear your entire wishlist?')) return;
+        const res = await API.wishlist.get();
+        if (res.success) {
+          for (const id of res.data) await API.wishlist.toggle(id);
+          updateBadges();
+          renderWishlist();
+          Toast.show('Wishlist cleared.', 'info');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
