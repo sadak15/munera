@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Munera Skincare — Luxury Botanical Beauty</title>
+  <meta name="description" content="Discover Munera Skincare — luxury botanical formulations for radiant, healthy skin.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+  <div id="app-header"></div>
+  <div id="toast-container"></div>
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-slider" id="hero-slider">
+        <div class="hero-slide active">
+          <div class="hero-bg"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1400&q=80&auto=format&fit=crop" alt="Luxury Skincare" loading="eager"></div>
+          <div class="hero-content container">
+            <div class="hero-text">
+              <span class="hero-eyebrow">New Collection 2025</span>
+              <h1 class="hero-title">Radiance Redefined</h1>
+              <p class="hero-desc">Botanical luxury formulated for modern skin. Discover the ritual that transforms.</p>
+              <div class="hero-actions">
+                <a href="products.html" class="btn btn-gold">Shop Now <i class="fas fa-arrow-right"></i></a>
+                <a href="about.html" class="btn btn-ghost-light">Our Story</a>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <div class="hero-product-card">
+                <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=500&q=80&auto=format&fit=crop" alt="Featured Product">
+                <div class="hero-product-info"><span class="hero-product-tag">Bestseller</span><h3>Vitamin C Brightening Serum</h3><span class="price">$68.00</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <div class="hero-bg"><img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1400&q=80&auto=format&fit=crop" alt="Skincare Ritual" loading="lazy"></div>
+          <div class="hero-content container">
+            <div class="hero-text">
+              <span class="hero-eyebrow">Hydration Series</span>
+              <h1 class="hero-title">Deeply Nourished</h1>
+              <p class="hero-desc">Hyaluronic acid meets botanical extracts. 72-hour hydration in every application.</p>
+              <div class="hero-actions">
+                <a href="products.html?category=serums" class="btn btn-gold">Shop Serums <i class="fas fa-arrow-right"></i></a>
+                <a href="products.html" class="btn btn-ghost-light">View All</a>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <div class="hero-product-card">
+                <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80&auto=format&fit=crop" alt="Hyaluronic Serum">
+                <div class="hero-product-info"><span class="hero-product-tag">New</span><h3>Hyaluronic Acid Serum</h3><span class="price">$58.00</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-controls">
+        <button class="hero-arrow hero-prev" id="hero-prev"><i class="fas fa-chevron-left"></i></button>
+        <div class="hero-dots" id="hero-dots"><button class="hero-dot active"></button><button class="hero-dot"></button></div>
+        <button class="hero-arrow hero-next" id="hero-next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Marquee
+    <div class="marquee-strip">
+      <div class="marquee-track">
+        <span>Free Shipping Over $75</span><span class="sep">✦</span><span>Cruelty Free &amp; Vegan</span><span class="sep">✦</span><span>Dermatologist Tested</span><span class="sep">✦</span><span>Clean Ingredients</span><span class="sep">✦</span><span>Eco-Friendly Packaging</span><span class="sep">✦</span>
+        <span>Free Shipping Over $75</span><span class="sep">✦</span><span>Cruelty Free &amp; Vegan</span><span class="sep">✦</span><span>Dermatologist Tested</span><span class="sep">✦</span><span>Clean Ingredients</span><span class="sep">✦</span><span>Eco-Friendly Packaging</span><span class="sep">✦</span>
+      </div>
+    </div> -->
+
+    <!-- Shop by Category — Image 1 style circles -->
+    <section class="categories section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-eyebrow">Our Services</span>
+          <h2 class="section-title">Shop by Category</h2>
+        </div>
+        <div class="categories-circle-grid" id="categories-grid"></div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products section" style="background:var(--cream-dark); padding: 20px 0;">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-eyebrow">Editor's Pick</span>
+          <h2 class="section-title">Bestselling Formulas</h2>
+          <a href="products.html" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="products-grid" id="featured-grid"></div>
+      </div>
+    </section>
+
+    <!-- Promo Banner
+    <section class="promo-banner">
+      <div class="promo-bg"><img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1400&q=80&auto=format&fit=crop" alt="Skincare Ritual"></div>
+      <div class="promo-overlay"></div>
+      <div class="promo-content container">
+        <div class="promo-text">
+          <span class="promo-eyebrow">Limited Offer</span>
+          <h2>The Complete Ritual Set</h2>
+          <p>All 5 steps. One curated collection. Save 20% when you bundle.</p>
+          <a href="products.html?category=sets" class="btn btn-gold">Shop the Set <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="promo-stats">
+          <div class="promo-stat"><span class="stat-num">15K+</span><span class="stat-label">Happy Customers</span></div>
+          <div class="promo-stat"><span class="stat-num">4.9</span><span class="stat-label">Average Rating</span></div>
+          <div class="promo-stat"><span class="stat-num">100%</span><span class="stat-label">Natural Ingredients</span></div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- How It Works -->
+    <section class="how-it-works section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-eyebrow">Simple Ritual</span>
+          <h2 class="section-title">Your 4-Step Routine</h2>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card"><div class="step-icon"><i class="fas fa-tint"></i></div><span class="step-num">01</span><h3>Cleanse</h3><p>Start with a gentle cleanse to remove impurities and prepare your skin.</p></div>
+          <div class="step-card"><div class="step-icon"><i class="fas fa-leaf"></i></div><span class="step-num">02</span><h3>Tone</h3><p>Balance your skin's pH and tighten pores with our botanical toners.</p></div>
+          <div class="step-card"><div class="step-icon"><i class="fas fa-flask"></i></div><span class="step-num">03</span><h3>Treat</h3><p>Apply targeted serums with active botanicals to address your skin concerns.</p></div>
+          <div class="step-card"><div class="step-icon"><i class="fas fa-spa"></i></div><span class="step-num">04</span><h3>Moisturise</h3><p>Seal in all the goodness with our luxurious moisturisers for all-day comfort.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Slider — Image 2 style -->
+    <section class="tslider-section section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-eyebrow">Testimonials</span>
+          <h2 class="section-title">From Our Satisfied Clients</h2>
+        </div>
+        <div class="tslider-wrap">
+          <button class="tslider-arrow tslider-prev" id="tslider-prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+          <div class="tslider-viewport">
+            <div class="tslider-track" id="tslider-track">
+
+              <div class="tslide active">
+                <div class="tslide-icon tslide-icon-teal"><i class="fas fa-magic"></i></div>
+                <span class="tslide-label">Serum Client</span>
+                <blockquote class="tslide-quote">"The Vitamin C Serum completely transformed my skin within two weeks. My dark spots have faded and I get compliments every single day!"</blockquote>
+                <div class="tslide-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <span class="tslide-name">Sarah M.</span>
+              </div>
+
+              <div class="tslide">
+                <div class="tslide-icon tslide-icon-rose"><i class="fas fa-leaf"></i></div>
+                <span class="tslide-label">Natural Skincare Client</span>
+                <blockquote class="tslide-quote">"I've tried dozens of luxury skincare brands. Munera is on another level. The textures, the scents, the results — absolutely unmatched. I'm a customer for life."</blockquote>
+                <div class="tslide-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <span class="tslide-name">Amira K.</span>
+              </div>
+
+              <div class="tslide">
+                <div class="tslide-icon tslide-icon-teal"><i class="fas fa-tint"></i></div>
+                <span class="tslide-label">Hydration Treatment Client</span>
+                <blockquote class="tslide-quote">"The Hyaluronic Serum is my desert-island product. My skin stays plump and hydrated all day long. Worth every single penny!"</blockquote>
+                <div class="tslide-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                <span class="tslide-name">Hani</span>
+              </div>
+
+              <div class="tslide">
+                <div class="tslide-icon tslide-icon-rose"><i class="fas fa-spa"></i></div>
+                <span class="tslide-label">Moisturiser Client</span>
+                <blockquote class="tslide-quote">"The overnight repair cream is like magic — I wake up with the softest, most glowing skin. My friends keep asking what I'm doing differently!"</blockquote>
+                <div class="tslide-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <span class="tslide-name">Aisha</span>
+              </div>
+
+            </div>
+          </div>
+          <button class="tslider-arrow tslider-next" id="tslider-next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="tslider-dots" id="tslider-dots"></div>
+      </div>
+    </section>
+
+    <!-- Brand Values -->
+    <section class="values-section">
+      <div class="container">
+        <div class="values-grid">
+          <div class="value-item"><i class="fas fa-seedling"></i><h4>Clean Beauty</h4><p>No parabens, sulphates, or harmful chemicals. Ever.</p></div>
+          <div class="value-item"><i class="fas fa-heart"></i><h4>Cruelty Free</h4><p>Never tested on animals. Certified by Leaping Bunny.</p></div>
+          <div class="value-item"><i class="fas fa-recycle"></i><h4>Sustainable</h4><p>Eco-conscious packaging. Carbon-neutral shipping.</p></div>
+          <div class="value-item"><i class="fas fa-microscope"></i><h4>Science-Backed</h4><p>Formulated with dermatologists. Clinically proven results.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="new-arrivals section">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-eyebrow">Just Launched</span>
+          <h2 class="section-title">New Arrivals</h2>
+          <a href="products.html" class="section-link">See All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="products-grid" id="new-arrivals-grid"></div>
+      </div>
+    </section>
+
+  </main>
+  <div id="app-footer"></div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const CATEGORIES = [
+      { slug:'serums',       label:'Serums',       desc:'Targeted actives for visible results.',  icon:'fas fa-flask',  color:'teal' },
+      { slug:'moisturizers', label:'Moisturizers', desc:'Deep hydration for all skin types.',     icon:'fas fa-spa',    color:'rose' },
+      { slug:'cleansers',    label:'Cleansers',    desc:'Gentle cleanse, pure and fresh skin.',   icon:'fas fa-tint',   color:'teal' },
+      { slug:'toners',       label:'Toners',       desc:'Balance and prep for every routine.',    icon:'fas fa-leaf',   color:'rose' },
+      { slug:'masks',        label:'Masks',        desc:'Weekly ritual for a radiant glow.',      icon:'fas fa-magic',  color:'teal' },
+      { slug:'spf',          label:'SPF',          desc:'Daily protection, invisible finish.',    icon:'fas fa-sun',    color:'rose' },
+    ];
+
+    function renderCategories() {
+      const grid = document.getElementById('categories-grid');
+      if (!grid) return;
+      grid.innerHTML = CATEGORIES.map(c => `
+        <div class="cat-item">
+          <a href="products.html?category=${c.slug}" class="cat-circle cat-${c.color}">
+            <i class="${c.icon}"></i>
+          </a>
+          <h3 class="cat-name cat-${c.color}-text">${c.label}</h3>
+          <p class="cat-desc">${c.desc}</p>
+          <a href="products.html?category=${c.slug}" class="cat-link">LEARN MORE</a>
+        </div>
+      `).join('');
+    }
+
+    async function renderFeatured() {
+      const grid = document.getElementById('featured-grid');
+      if (!grid) return;
+      const res = await API.products.getAll();
+      if (!res.success) return;
+      grid.innerHTML = res.data.filter(p => p.featured).slice(0, 4).map(buildProductCard).join('');
+    }
+
+    async function renderNewArrivals() {
+      const grid = document.getElementById('new-arrivals-grid');
+      if (!grid) return;
+      const res = await API.products.getAll();
+      if (!res.success) return;
+      grid.innerHTML = [...res.data].sort((a, b) => b.id - a.id).slice(0, 4).map(buildProductCard).join('');
+    }
+
+    function initHeroSlider() {
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots   = document.querySelectorAll('.hero-dot');
+      let current = 0, interval;
+      function goTo(i) {
+        slides[current].classList.remove('active'); dots[current].classList.remove('active');
+        current = (i + slides.length) % slides.length;
+        slides[current].classList.add('active'); dots[current].classList.add('active');
+      }
+      function startAuto() { interval = setInterval(() => goTo(current + 1), 5000); }
+      function stopAuto()  { clearInterval(interval); }
+      document.getElementById('hero-prev')?.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+      document.getElementById('hero-next')?.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+      dots.forEach((d, i) => d.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); }));
+      startAuto();
+    }
+
+    function initTestimonialSlider() {
+      const slides = [...document.querySelectorAll('.tslide')];
+      const dotsEl = document.getElementById('tslider-dots');
+      let cur = 0, autoTimer;
+
+      dotsEl.innerHTML = slides.map((_, i) =>
+        `<button class="tslider-dot${i===0?' active':''}" data-i="${i}"></button>`
+      ).join('');
+      const dots = [...dotsEl.querySelectorAll('.tslider-dot')];
+
+      function goTo(i) {
+        slides[cur].classList.remove('active'); dots[cur].classList.remove('active');
+        cur = (i + slides.length) % slides.length;
+        slides[cur].classList.add('active'); dots[cur].classList.add('active');
+      }
+
+      document.getElementById('tslider-prev')?.addEventListener('click', () => { clearInterval(autoTimer); goTo(cur - 1); startAuto(); });
+      document.getElementById('tslider-next')?.addEventListener('click', () => { clearInterval(autoTimer); goTo(cur + 1); startAuto(); });
+      dots.forEach(d => d.addEventListener('click', () => { clearInterval(autoTimer); goTo(+d.dataset.i); startAuto(); }));
+
+      function startAuto() { autoTimer = setInterval(() => goTo(cur + 1), 6000); }
+      startAuto();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCategories();
+      renderFeatured();
+      renderNewArrivals();
+      initHeroSlider();
+      initTestimonialSlider();
+    });
+  </script>
+</body>
+</html>
