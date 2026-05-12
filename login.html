@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Munera Skincare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body class="auth-body">
+
+  <div id="app-header"></div>
+  <div id="toast-container"></div>
+
+  <main class="auth-main">
+    <div class="auth-card">
+
+      <div class="auth-card-brand">
+        <a href="index.html" class="auth-logo">
+          <span class="logo-name">MUNERA</span>
+          <span class="logo-tagline">SKINCARE</span>
+        </a>
+      </div>
+
+      <div class="auth-card-head">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your account to continue.</p>
+      </div>
+
+      <form class="auth-form" id="login-form" novalidate>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="email" name="email" class="form-input"
+              placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <span class="field-error" id="email-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">
+            Password
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </label>
+          <div class="input-icon-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="password" name="password" class="form-input"
+              placeholder="Your password" autocomplete="current-password" required>
+            <button type="button" class="password-toggle" id="toggle-password" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <span class="field-error" id="password-error"></span>
+        </div>
+
+        <div class="form-group form-check-group">
+          <label class="form-check">
+            <input type="checkbox" id="remember"> Keep me signed in
+          </label>
+        </div>
+
+        <div class="form-error-banner" id="form-error" style="display:none"></div>
+
+        <button type="submit" class="btn btn-gold btn-lg btn-block" id="submit-btn">
+          Sign In
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <div class="auth-switch">
+        Don't have an account? <a href="register.html">Create one</a>
+      </div>
+
+      <!-- Demo hint -->
+      <div class="auth-demo-hint">
+        <i class="fas fa-info-circle"></i>
+        New here? <a href="register.html">Register</a> to create an account, or use any email you've previously registered with.
+      </div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Redirect if already logged in
+      if (API.session.isLoggedIn()) {
+        const next = new URLSearchParams(window.location.search).get('next');
+        window.location.href = next || 'account.html';
+        return;
+      }
+
+      // Password visibility toggle
+      document.getElementById('toggle-password')?.addEventListener('click', () => {
+        const input = document.getElementById('password');
+        const icon = document.querySelector('#toggle-password i');
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.className = 'fas fa-eye-slash';
+        } else {
+          input.type = 'password';
+          icon.className = 'fas fa-eye';
+        }
+      });
+
+      // Form submit
+      document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const email    = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        let valid = true;
+
+        if (!email) { showFieldError('email', 'Email is required.'); valid = false; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldError('email', 'Enter a valid email.'); valid = false; }
+
+        if (!password) { showFieldError('password', 'Password is required.'); valid = false; }
+
+        if (!valid) return;
+
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
+
+        const res = await API.auth.login({ email, password });
+
+        if (res.success) {
+          Toast.show(`Welcome back, ${res.data.firstName}! ✨`, 'success');
+          const next = new URLSearchParams(window.location.search).get('next');
+          setTimeout(() => { window.location.href = next || 'account.html'; }, 800);
+        } else {
+          showFormError(res.error || 'Invalid email or password.');
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In';
+        }
+      });
+
+      function showFieldError(field, msg) {
+        document.getElementById(`${field}-error`).textContent = msg;
+        document.getElementById(field)?.classList.add('input-error');
+      }
+      function showFormError(msg) {
+        const el = document.getElementById('form-error');
+        el.textContent = msg;
+        el.style.display = 'block';
+      }
+      function clearErrors() {
+        document.querySelectorAll('.field-error').forEach(e => e.textContent = '');
+        document.querySelectorAll('.form-input').forEach(i => i.classList.remove('input-error'));
+        const fe = document.getElementById('form-error');
+        fe.textContent = '';
+        fe.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
